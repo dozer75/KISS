@@ -1,0 +1,34 @@
+name: Release - NuGet
+
+on:
+  push:
+    tags: [ v* ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Cloning sources
+      uses: actions/checkout@v2
+    - name: Get version from tag
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/v/}      
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.401
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Test
+      id: build-test
+      run: dotnet test --no-restore
+    - name: NuGet pack
+      id: nuget-pack
+      if: ${{ success() }}
+      run: dotnet pack --no-restore --configuration Release -o ./output -p:Version=${{ steps.get_version.outputs.VERSION }}
+    - name: NuGet push NuGet packages
+      id: nuget-push-packages
+      if: ${{ success() }}
+      run: dotnet nuget push ./output/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_FORALLA }} --skip-duplicate
