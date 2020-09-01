@@ -1,4 +1,4 @@
-name: CI - master
+name: Continuous Integration - master
 
 on:
   push:
