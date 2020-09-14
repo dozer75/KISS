@@ -72,14 +72,22 @@ namespace Foralla.KISS.Repository.Extensions
 
             services.AddScoped<ITransaction, MongoTransaction>();
 
-            var builders = (scanAssemblies.Any() ?
-                scanAssemblies :
-                Assembly.GetEntryAssembly()?.GetReferencedAssemblies().Select(Assembly.Load)
-                    .Union(new[] { Assembly.GetEntryAssembly() }))
-                    .SelectMany(a => a.GetTypes().Where(t => t.IsClass && !t.IsAbstract &&
-                                                             t.GetInterfaces().Any(it => it.IsGenericType &&
-                                                                                         it.GetGenericTypeDefinition() == typeof(IMongoModelBuilder<,>))))
-                    .ToArray();
+            var assemblies = scanAssemblies;
+
+            if (!assemblies.Any())
+            {
+                var assembly = Assembly.GetEntryAssembly() ??
+                               throw new InvalidOperationException($"Could not find entry assembly. Try to use {nameof(scanAssemblies)} instead.");
+
+                assemblies = assembly.GetReferencedAssemblies().Select(Assembly.Load)
+                                     .Union(new[] { assembly })
+                                     .ToArray();
+            }
+
+            var builders = assemblies.SelectMany(a => a.GetTypes().Where(t => t.IsClass && !t.IsAbstract &&
+                                                                              t.GetInterfaces().Any(it => it.IsGenericType &&
+                                                                                                          it.GetGenericTypeDefinition() == typeof(IMongoModelBuilder<,>))))
+                                     .ToArray();
 
             foreach (var builder in builders)
             {

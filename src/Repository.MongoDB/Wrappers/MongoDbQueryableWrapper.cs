@@ -52,7 +52,8 @@ namespace Foralla.KISS.Repository.Wrappers
         public async IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
             //Since interfaces are internal in the mongo implementation at this level, let's use reflection.
-            var executeAsyncMethod = _provider.InternalProvider.GetType().GetMethod("ExecuteAsync").MakeGenericMethod(typeof(IAsyncCursor<T>));
+            var executeAsyncMethod = _provider.InternalProvider.GetType().GetMethod("ExecuteAsync")?.MakeGenericMethod(typeof(IAsyncCursor<T>)) ??
+                    throw new InvalidOperationException("Could not retrieve internal ExecuteAsync method from MongoDB internal provider.");
 
             var cursor = await ((Task<IAsyncCursor<T>>)executeAsyncMethod.Invoke(_provider.InternalProvider, new object[] { Expression, cancellationToken })).ConfigureAwait(false);
 

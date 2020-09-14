@@ -24,12 +24,11 @@ namespace Foralla.KISS.Repository.Wrappers
 
             try
             {
-                return (IQueryable)Activator.CreateInstance(typeof(MongoDbQueryableWrapper<>).MakeGenericType(elementType),
-                                                            new object[] { this, expression });
+                return (IQueryable)Activator.CreateInstance(typeof(MongoDbQueryableWrapper<>).MakeGenericType(elementType), this, expression);
             }
             catch (TargetInvocationException e)
             {
-                throw e.InnerException;
+                throw e.InnerException ?? e;
             }
         }
 
@@ -86,18 +85,13 @@ namespace Foralla.KISS.Repository.Wrappers
                 }
             }
 
-            var interfaces = typeInfo.GetInterfaces();
-
-            if (interfaces != null)
+            foreach (var iface in typeInfo.GetInterfaces())
             {
-                foreach (var iface in interfaces)
-                {
-                    var enumerable = FindEnumerable(iface);
+                var enumerable = FindEnumerable(iface);
 
-                    if (enumerable != null)
-                    {
-                        return enumerable;
-                    }
+                if (enumerable != null)
+                {
+                    return enumerable;
                 }
             }
 

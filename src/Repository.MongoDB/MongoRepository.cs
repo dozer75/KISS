@@ -73,7 +73,7 @@ namespace Foralla.KISS.Repository
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            if (Equals(entity.Id, default(TKey)))
+            if (entity.Id.Equals(default(TKey)))
             {
                 await _collection.InsertOneAsync(_session, entity, new InsertOneOptions { BypassDocumentValidation = false }, cancellationToken)
                                  .ConfigureAwait(false);

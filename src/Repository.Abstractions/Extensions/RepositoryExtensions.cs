@@ -9,12 +9,11 @@ namespace Foralla.KISS.Repository.Extensions
     public static class RepositoryExtensions
     {
         /// <summary>
-        ///     Adds all <see cref="IRepository{TKey}"/> implementations to the specified <paramref name="services"/>.
+        ///     Adds all <see cref="IRepository{TEntity,TKey}"/> implementations to the specified <paramref name="services"/>.
         /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to apply Entity Framework support.</param>
+        /// <param name="services">The <see cref="IServiceCollection"/> to apply repositories.</param>
         /// <param name="scanAssemblies">
-        ///     Assemblies to scan for <see cref="IEntityBase{TKey}"/> and <see cref="IEFModelBuilder"/>
-        ///     instances to configure the Entity Framework support.
+        ///     Assemblies to scan for <see cref="IRepository{TEntity,TKey}"/>.
         /// </param>
         /// <returns>The updated <paramref name="services"/> instance.</returns>
         public static IServiceCollection AddRepositories(this IServiceCollection services, params Assembly[] scanAssemblies)
@@ -45,7 +44,7 @@ namespace Foralla.KISS.Repository.Extensions
 
         private static bool IsRepository(Type it)
         {
-            return it.IsGenericType && it.GetGenericTypeDefinition() == typeof(IRepository<>);
+            return it.IsGenericType && it.GetGenericTypeDefinition() == typeof(IRepository<,>);
         }
     }
 }
