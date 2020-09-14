@@ -32,7 +32,7 @@ namespace Foralla.KISS.Repository
             }
         }
 
-        public async Task CommitAsync(CancellationToken cancellationToken)
+        public async Task CommitAsync(CancellationToken cancellationToken = default)
         {
             if (_clientSession.IsInTransaction)
             {

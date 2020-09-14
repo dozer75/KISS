@@ -12,8 +12,9 @@ using Pluralize.NET;
 
 namespace Foralla.KISS.Repository
 {
-    public abstract class MongoRepository<TEntity> : IRepository<TEntity>
-        where TEntity : IEntityBase
+    public abstract class MongoRepository<TEntity, TKey> : IRepository<TEntity, TKey>
+        where TKey : struct
+        where TEntity : IEntityBase<TKey>
     {
         private readonly IMongoCollection<TEntity> _collection;
         private readonly IClientSessionHandle _session;
@@ -23,7 +24,7 @@ namespace Foralla.KISS.Repository
         public Expression Expression => _queryable.Expression;
         public IQueryProvider Provider => _queryable.Provider;
 
-        protected MongoRepository(IClientSessionHandle session, IMongoDatabase database, IMongoModelBuilder<TEntity> builder, IPluralize pluralize)
+        protected MongoRepository(IClientSessionHandle session, IMongoDatabase database, IMongoModelBuilder<TEntity, TKey> builder, IPluralize pluralize)
         {
             if (database == null)
             {
@@ -72,7 +73,7 @@ namespace Foralla.KISS.Repository
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            if (entity.Id == default)
+            if (Equals(entity.Id, default(TKey)))
             {
                 await _collection.InsertOneAsync(_session, entity, new InsertOneOptions { BypassDocumentValidation = false }, cancellationToken)
                                  .ConfigureAwait(false);
@@ -80,7 +81,7 @@ namespace Foralla.KISS.Repository
                 return entity;
             }
 
-            return await _collection.FindOneAndReplaceAsync(_session, e => e.Id == entity.Id, entity,
+            return await _collection.FindOneAndReplaceAsync(_session, e => e.Id.Equals(entity.Id), entity,
                                                             new FindOneAndReplaceOptions<TEntity, TEntity>
                                                             {
                                                                 ReturnDocument = ReturnDocument.After,
@@ -105,9 +106,9 @@ namespace Foralla.KISS.Repository
             return result.DeletedCount;
         }
 
-        public async Task<TEntity> GetAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
         {
-            var findResult = await _collection.FindAsync(entity => entity.Id == id, cancellationToken: cancellationToken)
+            var findResult = await _collection.FindAsync(entity => entity.Id.Equals(id), cancellationToken: cancellationToken)
                                               .ConfigureAwait(false);
 
             return await findResult.FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
@@ -128,9 +129,9 @@ namespace Foralla.KISS.Repository
             return GetEnumerator();
         }
 
-        public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<bool> DeleteAsync(TKey id, CancellationToken cancellationToken)
         {
-            return await DeleteAsync(entity => entity.Id == id, cancellationToken).ConfigureAwait(false) > 0;
+            return await DeleteAsync(entity => entity.Id.Equals(id), cancellationToken).ConfigureAwait(false) > 0;
         }
     }
 }

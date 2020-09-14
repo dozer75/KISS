@@ -7,6 +7,6 @@ namespace Foralla.KISS.Repository
     {
         void Commit();
 
-        Task CommitAsync(CancellationToken cancellationToken);
+        Task CommitAsync(CancellationToken cancellationToken = default);
     }
 }

@@ -3,8 +3,9 @@ using MongoDB.Driver;
 
 namespace Foralla.KISS.Repository
 {
-    public abstract class MongoModelBuilder<TEntity> : IMongoModelBuilder<TEntity>
-        where TEntity : IEntityBase
+    public abstract class MongoModelBuilder<TEntity, TKey> : IMongoModelBuilder<TEntity, TKey>
+        where TKey : struct
+        where TEntity : IEntityBase<TKey>
     {
         public void CreateModel()
         {

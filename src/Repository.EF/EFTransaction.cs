@@ -1,9 +1,12 @@
-﻿using System.Threading;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 
 namespace Foralla.KISS.Repository
 {
+    [ExcludeFromCodeCoverage]
     internal class EFTransaction : ITransaction
     {
         private readonly TransactionScope _transaction;
@@ -18,12 +21,14 @@ namespace Foralla.KISS.Repository
             _transaction.Complete();
         }
 
-        public Task CommitAsync(CancellationToken cancellationToken)
+        public Task CommitAsync(CancellationToken cancellationToken = default)
         {
-            if (!cancellationToken.IsCancellationRequested)
+            if (cancellationToken != default)
             {
-                _transaction.Complete();
+                throw new ArgumentException($"{nameof(cancellationToken)} is not supported with EF repository.", nameof(cancellationToken));
             }
+
+            Commit();
 
             return Task.CompletedTask;
         }

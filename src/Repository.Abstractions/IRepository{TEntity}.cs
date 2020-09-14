@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Foralla.KISS.Repository
 {
-    public interface IRepository<TEntity> : IQueryable<TEntity>, IAsyncEnumerable<TEntity>, IRepository
-        where TEntity : IEntityBase
+    public interface IRepository<TEntity, TKey> : IQueryable<TEntity>, IAsyncEnumerable<TEntity>, IRepository<TKey>
+        where TKey : struct
+        where TEntity : IEntityBase<TKey>
     {
         /// <summary>
         ///     Adds or updates the specified <paramref name="entity"/> to the repository.
@@ -45,6 +46,6 @@ namespace Foralla.KISS.Repository
         ///     An instance of <typeparamref name="TEntity"/> if found, otherwise <see langword="null"/> when the 
         ///     <see cref="Task{TResult}"/> completes.
         /// </returns>
-        Task<TEntity> GetAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default);
     }
 }

@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Foralla.KISS.Repository
 {
-    public abstract class EFModelBuilder<TEntity> : IEFModelBuilder
-        where TEntity : class, IEntityBase
+    public abstract class EFModelBuilder<TEntity, TKey> : IEFModelBuilder
+        where TKey : struct
+        where TEntity : class, IEntityBase<TKey>
     {
         public void CreateModel(ModelBuilder builder)
         {

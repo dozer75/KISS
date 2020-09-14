@@ -26,7 +26,7 @@ namespace Foralla.KISS.Repository.Extensions
 
             services.TryAddSingleton<IPluralize, Pluralizer>();
 
-            services.AddSingleton(p =>
+            services.TryAddSingleton(p =>
             {
                 var options = new MongoOptions();
 
@@ -45,7 +45,7 @@ namespace Foralla.KISS.Repository.Extensions
                 return options;
             });
 
-            services.AddSingleton<IMongoClient>(p =>
+            services.TryAddSingleton<IMongoClient>(p =>
             {
                 var options = new MongoOptions();
 
@@ -54,7 +54,7 @@ namespace Foralla.KISS.Repository.Extensions
                 return new MongoClient(options.ServerSettings);
             });
 
-            services.AddSingleton(p =>
+            services.TryAddSingleton(p =>
             {
                 var client = p.GetRequiredService<IMongoClient>();
                 var options = p.GetRequiredService<MongoOptions>();
@@ -62,7 +62,7 @@ namespace Foralla.KISS.Repository.Extensions
                 return client.GetDatabase(options.DatabaseName, options.DatabaseSettings);
             });
 
-            services.AddScoped(p =>
+            services.TryAddScoped(p =>
             {
                 var db = p.GetRequiredService<IMongoClient>();
                 var options = p.GetRequiredService<MongoOptions>();
@@ -78,12 +78,12 @@ namespace Foralla.KISS.Repository.Extensions
                     .Union(new[] { Assembly.GetEntryAssembly() }))
                     .SelectMany(a => a.GetTypes().Where(t => t.IsClass && !t.IsAbstract &&
                                                              t.GetInterfaces().Any(it => it.IsGenericType &&
-                                                                                         it.GetGenericTypeDefinition() == typeof(IMongoModelBuilder<>))))
+                                                                                         it.GetGenericTypeDefinition() == typeof(IMongoModelBuilder<,>))))
                     .ToArray();
 
             foreach (var builder in builders)
             {
-                services.AddSingleton(builder.GetInterfaces().First(it => it.IsGenericType && it.GetGenericTypeDefinition() == typeof(IMongoModelBuilder<>)), builder);
+                services.TryAddSingleton(builder.GetInterfaces().First(it => it.IsGenericType && it.GetGenericTypeDefinition() == typeof(IMongoModelBuilder<,>)), builder);
             }
 
             return services;

@@ -8,21 +8,33 @@ namespace Foralla.KISS.Repository.Extensions
 {
     public static class RepositoryExtensions
     {
-        public static IServiceCollection AddRepositories(this IServiceCollection services,
-                                                         params Assembly[] scanAssemblies)
+        /// <summary>
+        ///     Adds all <see cref="IRepository{TKey}"/> implementations to the specified <paramref name="services"/>.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to apply Entity Framework support.</param>
+        /// <param name="scanAssemblies">
+        ///     Assemblies to scan for <see cref="IEntityBase{TKey}"/> and <see cref="IEFModelBuilder"/>
+        ///     instances to configure the Entity Framework support.
+        /// </param>
+        /// <returns>The updated <paramref name="services"/> instance.</returns>
+        public static IServiceCollection AddRepositories(this IServiceCollection services, params Assembly[] scanAssemblies)
         {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
 
-            var repositories = (scanAssemblies.Any() ?
-                scanAssemblies :
-                Assembly.GetEntryAssembly()?.GetReferencedAssemblies().Select(Assembly.Load)
-                    .Union(new[] { Assembly.GetEntryAssembly() }))
-                    .SelectMany(a => a.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces().Any(IsRepository)))
-                    .ToArray();
+            var repositories = (scanAssemblies.Any() ? scanAssemblies : Assembly.GetCallingAssembly().GetReferencedAssemblies().Select(Assembly.Load)
+                                                                                .Union(new[] { Assembly.GetCallingAssembly() }))
+                        .SelectMany(a => a.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces().Any(IsRepository)))
+                        .ToArray();
 
             foreach (var repository in repositories)
             {
-                foreach (var it in repository.GetInterfaces()
-                                               .Where(it => it != typeof(IDisposable)))
+                var allInterfaces = repository.GetInterfaces();
+
+                foreach (var it in repository.GetInterfaces().Except(allInterfaces.SelectMany(ai => ai.GetInterfaces()))
+                                             .Where(it => it != typeof(IDisposable)))
                 {
                     services.TryAddScoped(it, repository);
                 }

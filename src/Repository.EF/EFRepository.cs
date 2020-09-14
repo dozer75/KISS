@@ -9,8 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Foralla.KISS.Repository
 {
-    public abstract class EFRepository<TEntity> : IRepository<TEntity>
-        where TEntity : class, IEntityBase
+    public abstract class EFRepository<TEntity, TKey> : IRepository<TEntity, TKey>
+        where TKey : struct
+        where TEntity : class, IEntityBase<TKey>
     {
         private readonly DbContext _context;
         private readonly DbSet<TEntity> _dbSet;
@@ -35,7 +36,7 @@ namespace Foralla.KISS.Repository
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            if (entity.Id == Guid.Empty)
+            if (Equals(entity.Id, default(TKey)))
             {
                 await _dbSet.AddAsync(entity, cancellationToken).ConfigureAwait(false);
             }
@@ -66,7 +67,7 @@ namespace Foralla.KISS.Repository
             return await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<TEntity> GetAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
         {
             var entity = await _dbSet.FindAsync(new object[] { id }, cancellationToken).ConfigureAwait(false);
             _context.Entry(entity).State = EntityState.Detached;
@@ -89,9 +90,9 @@ namespace Foralla.KISS.Repository
             return _queryable.GetEnumerator();
         }
 
-        public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<bool> DeleteAsync(TKey id, CancellationToken cancellationToken)
         {
-            return await DeleteAsync(entity => entity.Id == id, cancellationToken).ConfigureAwait(false) > 0;
+            return await DeleteAsync(entity => id.Equals(entity.Id), cancellationToken).ConfigureAwait(false) > 0;
         }
     }
 }
