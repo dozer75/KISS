@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Foralla.KISS.Repository
 {
-    public interface IRepository<TKey>
+    public interface IRepository<in TKey>
     {
         /// <summary>
         ///     Removes the entity that matches <paramref name="id"/>.

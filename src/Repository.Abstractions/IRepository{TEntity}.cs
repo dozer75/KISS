@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Foralla.KISS.Repository
 {
-    public interface IRepository<TEntity, TKey> : IQueryable<TEntity>, IAsyncEnumerable<TEntity>, IRepository<TKey>
-        where TKey : struct
+    public interface IRepository<TEntity, in TKey> : IQueryable<TEntity>, IAsyncEnumerable<TEntity>, IRepository<TKey>
         where TEntity : IEntityBase<TKey>
     {
         /// <summary>
