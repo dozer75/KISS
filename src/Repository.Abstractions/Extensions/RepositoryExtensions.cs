@@ -18,7 +18,7 @@ namespace Foralla.KISS.Repository.Extensions
         /// <returns>The updated <paramref name="services"/> instance.</returns>
         public static IServiceCollection AddRepositories(this IServiceCollection services, params Assembly[] scanAssemblies)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }

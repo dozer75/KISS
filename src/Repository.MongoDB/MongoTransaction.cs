@@ -13,7 +13,7 @@ namespace Foralla.KISS.Repository
         {
             _clientSession = clientSession ?? throw new ArgumentNullException(nameof(clientSession));
 
-            if (options == null)
+            if (options is null)
             {
                 throw new ArgumentNullException(nameof(options));
             }

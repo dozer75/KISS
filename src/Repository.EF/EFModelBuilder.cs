@@ -10,7 +10,7 @@ namespace Foralla.KISS.Repository
     {
         public void CreateModel(ModelBuilder builder)
         {
-            if (builder == null)
+            if (builder is null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }

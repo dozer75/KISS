@@ -6,8 +6,7 @@ namespace Foralla.KISS.Repository
 {
     /// <summary>
     ///     Configuration class used by 
-    ///     <see cref="Extensions.EFExtensions.AddEFRepository(Microsoft.Extensions.DependencyInjection.IServiceCollection, Action{EFOptions, IServiceProvider}, System.Reflection.Assembly[])"/>
-    ///     to configure the underlying <see cref="DbContext"/>.
+    ///     <see cref="Extensions.EFExtensions.AddEFRepository"/> to configure the underlying <see cref="DbContext"/>.
     /// </summary>
     public class EFOptions
     {

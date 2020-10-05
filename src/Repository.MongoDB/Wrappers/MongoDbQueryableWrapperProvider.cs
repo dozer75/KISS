@@ -51,12 +51,12 @@ namespace Foralla.KISS.Repository.Wrappers
         {
             var result = FindEnumerable(type);
 
-            return result == null ? type : result.GetTypeInfo().GetGenericArguments()[0];
+            return result is null ? type : result.GetTypeInfo().GetGenericArguments()[0];
         }
 
         private static Type FindEnumerable(Type type)
         {
-            if (type == null || type == typeof(string))
+            if (type is null || type == typeof(string))
             {
                 return null;
             }

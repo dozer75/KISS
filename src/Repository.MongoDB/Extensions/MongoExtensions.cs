@@ -14,12 +14,12 @@ namespace Foralla.KISS.Repository.Extensions
                                                             Action<MongoOptions, IServiceProvider> configure,
                                                             params Assembly[] scanAssemblies)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (configure == null)
+            if (configure is null)
             {
                 throw new ArgumentNullException(nameof(configure));
             }
@@ -32,12 +32,12 @@ namespace Foralla.KISS.Repository.Extensions
 
                 configure(options, p);
 
-                if (options.ServerSettings == null)
+                if (options.ServerSettings is null)
                 {
                     throw new ArgumentException($"{nameof(MongoOptions)}.{options.ServerSettings} must be set.", nameof(configure));
                 }
 
-                if (options.DatabaseName == null)
+                if (options.DatabaseName is null)
                 {
                     throw new ArgumentException($"{nameof(MongoOptions)}.{options.DatabaseName} must be set.", nameof(configure));
                 }

@@ -29,12 +29,12 @@ namespace Foralla.KISS.Repository.Extensions
         public static IServiceCollection AddEFRepository(this IServiceCollection services, Action<EFOptions, IServiceProvider> configure,
                                                          params Assembly[] scanAssemblies)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (configure == null)
+            if (configure is null)
             {
                 throw new ArgumentNullException(nameof(configure));
             }
@@ -47,7 +47,7 @@ namespace Foralla.KISS.Repository.Extensions
 
                 configure(options, p);
 
-                if (options.OnConfiguring == null)
+                if (options.OnConfiguring is null)
                 {
                     throw new ArgumentException($"{nameof(EFOptions)}.{nameof(options.OnConfiguring)} is null.", nameof(configure));
                 }

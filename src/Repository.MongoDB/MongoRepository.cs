@@ -26,17 +26,17 @@ namespace Foralla.KISS.Repository
 
         protected MongoRepository(IClientSessionHandle session, IMongoDatabase database, IMongoModelBuilder<TEntity, TKey> builder, IPluralize pluralize)
         {
-            if (database == null)
+            if (database is null)
             {
                 throw new ArgumentNullException(nameof(database));
             }
 
-            if (pluralize == null)
+            if (pluralize is null)
             {
                 throw new ArgumentNullException(nameof(pluralize));
             }
 
-            if (builder == null)
+            if (builder is null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
@@ -68,7 +68,7 @@ namespace Foralla.KISS.Repository
 
         public async Task<TEntity> AddOrUpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
