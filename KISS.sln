@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository.Azure.StorageTable", "src\Repository.Azure.StorageTable\Repository.Azure.StorageTable.csproj", "{9D689590-0242-48D6-90C3-BB33B51D61F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +68,18 @@ Global
 		{489731DF-FF2E-493A-B0BE-A29B93067723}.Release|x64.Build.0 = Release|Any CPU
 		{489731DF-FF2E-493A-B0BE-A29B93067723}.Release|x86.ActiveCfg = Release|Any CPU
 		{489731DF-FF2E-493A-B0BE-A29B93067723}.Release|x86.Build.0 = Release|Any CPU
+		{9D689590-0242-48D6-90C3-BB33B51D61F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D689590-0242-48D6-90C3-BB33B51D61F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D689590-0242-48D6-90C3-BB33B51D61F4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9D689590-0242-48D6-90C3-BB33B51D61F4}.Debug|x64.Build.0 = Debug|Any CPU
+		{9D689590-0242-48D6-90C3-BB33B51D61F4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9D689590-0242-48D6-90C3-BB33B51D61F4}.Debug|x86.Build.0 = Debug|Any CPU
+		{9D689590-0242-48D6-90C3-BB33B51D61F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D689590-0242-48D6-90C3-BB33B51D61F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D689590-0242-48D6-90C3-BB33B51D61F4}.Release|x64.ActiveCfg = Release|Any CPU
+		{9D689590-0242-48D6-90C3-BB33B51D61F4}.Release|x64.Build.0 = Release|Any CPU
+		{9D689590-0242-48D6-90C3-BB33B51D61F4}.Release|x86.ActiveCfg = Release|Any CPU
+		{9D689590-0242-48D6-90C3-BB33B51D61F4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +88,7 @@ Global
 		{20777C61-5613-42E1-A451-1FA1EC8EDDD6} = {A215A1F7-E264-4621-AE52-AB593FF66409}
 		{B9187AF1-E838-4922-8819-D0D35B7A93E4} = {A215A1F7-E264-4621-AE52-AB593FF66409}
 		{489731DF-FF2E-493A-B0BE-A29B93067723} = {A215A1F7-E264-4621-AE52-AB593FF66409}
+		{9D689590-0242-48D6-90C3-BB33B51D61F4} = {A215A1F7-E264-4621-AE52-AB593FF66409}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {56EA5B51-9F59-483D-9CF6-6BEE3900B795}
